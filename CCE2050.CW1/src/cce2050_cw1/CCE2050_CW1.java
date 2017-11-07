@@ -30,16 +30,17 @@ public class CCE2050_CW1 {
         System.out.println("Please enter the type of Shape you would like to create:");
         System.out.println("- Enter [2D] to create a 2D Shape -");
         System.out.println("- Enter [3D] to create a 3D Shape -");
+        System.out.println("- Enter [X] to Exit the program -");
         
         choice1 = s.next().charAt(0);
-        System.out.println(choice1);
+        //System.out.println(choice1);
         
         switch(choice1){
             
             case '2': System.out.println("Please enter the type of 2D Shape that you wish to create:");
-                      System.out.println("- Enter C to create a Circle -");
-                      System.out.println("- Enter T to create a Triangle -");
-                      System.out.println("- Enter R to create a Rectangle -");
+                      System.out.println("- Enter [C] to create a Circle -");
+                      System.out.println("- Enter [T] to create a Triangle -");
+                      System.out.println("- Enter [R] to create a Rectangle -");
                       
                       choice2 = s.next().charAt(0);
                       choice2 = Character.toUpperCase(choice2);
@@ -83,13 +84,15 @@ public class CCE2050_CW1 {
                                 rectangleChoice.getPerimeter();
                                 break;
                                 
-                        default:
+                        default: System.out.println("Invalid input. Returning to the beginning.");
+                                 Menu();
+                                 break;
                       }
                       break;
                       
             case '3': System.out.println("Please select the type of 3D Shape that you wish to create:");
-                      System.out.println("- Enter S to create a Sphere -");
-                      System.out.println("- Enter C to create a Cylinder -");
+                      System.out.println("- Enter [S] to create a Sphere -");
+                      System.out.println("- Enter [C] to create a Cylinder -");
                       
                       choice3 = s.next().charAt(0);
                       choice3 = Character.toUpperCase(choice3);
@@ -118,14 +121,20 @@ public class CCE2050_CW1 {
                                 break;
                       }
                     break;
+            
+            case 'x': break;
                     
-            default: System.out.println("Please select a valid option /n");
+            default: System.out.println("Please select a valid option");
                      Menu();
                      break;
                 
         
         }
         
+   
+    }
+    
+    public static void sendShapes (){
         
     }
     
