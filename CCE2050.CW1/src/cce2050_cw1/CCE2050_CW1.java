@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 package cce2050_cw1;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -15,10 +20,30 @@ public class CCE2050_CW1 {
     /**
      * @param args the command line arguments
      */
+    
+    static ObjectOutputStream sendObject;
+    static ObjectInputStream receiveObject;
+    static String ip = "127.0.0.1";
+    static int socket = 5555;
+    
+    
     public static void main(String[] args) {
         // TODO code application logic here
+        try{
+        
+        Socket clientSocket = new Socket(ip, socket);
+        System.out.println("Client Socket opened at ip address " + ip + " and port number " + socket);
+        
+        sendObject = new ObjectOutputStream(clientSocket.getOutputStream());
+        receiveObject = new ObjectInputStream(clientSocket.getInputStream());
         
         Menu();
+        
+        } catch (Exception e){
+            System.out.println("ERROR:" + e);
+            
+            
+        }  
     }
     
     public static void Menu () {
@@ -54,6 +79,15 @@ public class CCE2050_CW1 {
                                 circleChoice.displayDescription();
                                 System.out.println("My area is " + circleChoice.getArea());
                                 circleChoice.getPerimeter();
+                                System.out.println("My perimeter is " + circleChoice.getPerimeter());
+                                
+                                try{
+                                sendObject.writeObject(circleChoice);
+                                sendObject.flush();
+                                } catch (IOException e){
+                                    System.out.println(e);
+                                }
+                                
                                 break;
                           
                         case 'T': System.out.println("Enter a name for your Triangle:");
@@ -134,8 +168,23 @@ public class CCE2050_CW1 {
    
     }
     
+    /*
     public static void sendShapes (){
         
     }
+    
+    public static void Client (){
+        
+        try{
+        Socket clientSocket = new Socket("127.0.0.1", 5555);
+        ObjectOutputStream sendObject = new ObjectOutputStream(clientSocket.getOutputStream());
+        
+        //sendObject.writeObject(a);
+        
+        } catch (Exception e){
+            System.out.println("ERROR:" + e);
+        }
+    }
+    */
     
 }
