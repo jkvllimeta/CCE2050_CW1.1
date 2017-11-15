@@ -5,13 +5,17 @@
  */
 package cce2050_cw1;
 
+import java.io.Serializable;
+
 /**
  *
  * @author M00607647
  */
-public class Circle extends TwoDShapes{
+public class Circle extends TwoDShapes implements Serializable{
     
     private double circRadius;
+    private double area;
+    double perimeter;
     
     public Circle(String name, double radius){
         super(name, 0);
