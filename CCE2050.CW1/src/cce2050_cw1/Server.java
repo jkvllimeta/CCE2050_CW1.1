@@ -6,6 +6,7 @@
 package cce2050_cw1;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -37,25 +38,51 @@ public class Server {
     static int socketNo = 5555;
     private static ServerSocket serverSocket;
     private static Socket socket;
+    private static File arrayFile = new File("shapearray.dat");
     
     public static void main(String[] args) {
-    System.out.println ("Server Started");
-    
+        
     new Thread( () -> {
-    try{
-         serverSocket = new ServerSocket(socketNo);
-                
+    try{       
                
-    while (true) {
-    
-                socket = serverSocket.accept();
+        while (true) {
                 
+                serverSocket = new ServerSocket(socketNo);
+                System.out.println ("Server Started");
+                
+                socket = serverSocket.accept();
                 System.out.println("Connected");
                // shapeToClient = new ObjectOutputStream(socket.getOutputStream());
                 
                 shapeFromClient = new ObjectInputStream(socket.getInputStream());
+                System.out.println("Stream from Client initialized");
+                
                 arrayListToClient = new ObjectOutputStream(socket.getOutputStream());
-                writeToFile = new ObjectOutputStream(new FileOutputStream("shapearray.dat", true));
+                System.out.println("Stream to Client initialized");
+                
+                writeToFile = new ObjectOutputStream(new FileOutputStream(arrayFile, true));
+                System.out.println("File Writer initialized");
+                
+                Circle receivedShape = (Circle) shapeFromClient.readObject();
+                shapeFromClient.close();
+                System.out.println(receivedShape.getClass() + " received from Client");
+                
+                shapesArray.add(receivedShape);
+                
+                System.out.println(receivedShape.getName() + " added to the Shapes ArrayList");
+                
+                writeToFile.writeObject(receivedShape);
+                
+                /*
+                for (Shapes s : shapesArray){
+                    
+                    writeToFile.writeObject(shapesArray);
+                    
+                }*/
+                
+                //shapesArray.add(clientShape);
+                System.out.println(shapesArray.get(0).getName());
+                System.out.println(receivedShape.getArea());
                 
              //   Object clientInput = shapeFromClient.readObject();
                 
@@ -95,12 +122,7 @@ public class Server {
                 //System.out.println();
                 
                // Shapes receivedShape = (Shapes) shapeFromClient.readObject();
-                 Circle  receivedShape= (Circle) shapeFromClient.readObject();
-               shapesArray.add( receivedShape);
-                
-                //shapesArray.add(clientShape);
-            System.out.println(shapesArray.get(0).getName());
-               System.out.println(receivedShape.getArea());
+
 
             }
     
@@ -124,10 +146,24 @@ public class Server {
     }*/
     
     public static void sendCircle(){
+       
+        try{
+            for (int i = 0; i<shapesArray.size(); i++){
+            
+            //readFromFile.readObject(arrayFile);
+            if (shapesArray.get(i) instanceof Circle){
+            
+                arrayListToClient.writeObject(i);   
+                }
+            }
+            
+        } catch (Exception e){
+            e.printStackTrace();
+                
+        } 
         
-        
-        
-    }
     
+    
+    }
     
 }

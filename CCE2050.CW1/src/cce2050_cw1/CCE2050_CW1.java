@@ -24,7 +24,7 @@ public class CCE2050_CW1 {
     static ObjectOutputStream sendObject;
     static ObjectInputStream receiveObject;
     static String ip = "127.0.0.1";
-    static int socket = 5555;
+    static int socketNo = 5555;
     static Scanner s = new Scanner(System.in);
     static ArrayList<Shapes> shapesArray = new ArrayList<Shapes>();
     
@@ -32,8 +32,8 @@ public class CCE2050_CW1 {
         // TODO code application logic here
         try{
         
-        Socket clientSocket = new Socket(ip, socket);
-        System.out.println("Client Socket opened at ip address " + ip + " and port number " + socket);
+        Socket clientSocket = new Socket(ip, socketNo);
+        System.out.println("Client Socket opened at ip address " + ip + " and port number " + socketNo);
         
         sendObject = new ObjectOutputStream(clientSocket.getOutputStream());
        // receiveObject = new ObjectInputStream(clientSocket.getInputStream());
@@ -159,10 +159,11 @@ public class CCE2050_CW1 {
                                 try{
                                 sendObject.writeObject(circleChoice);
                                sendObject.flush();
+                               sendObject.close();
                                //clientSocket.close();
                                 } catch (IOException e){
                                     System.out.println(e);
-                                }
+                                } 
     }
     
     public static void triangleMenu(){
@@ -219,6 +220,7 @@ public class CCE2050_CW1 {
                                 System.out.println("My volume is " + cylinderChoice.getVolume());
     }
     
+    
     public static void sendToServer(){
         
         try{
@@ -238,4 +240,99 @@ public class CCE2050_CW1 {
         
         Menu();
     }
+    
+    
+    public static void receiveShapes() {
+        try {
+            Socket socket = new Socket(ip, socketNo);
+
+            ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
+            
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("Select the type of Shape you would like to receive from the Server: ");
+            System.out.println("- Enter [C] for Circles -");
+            System.out.println("- Enter [R] for Rectangles -");
+            System.out.println("- Enter [T] for Triangles -");
+            System.out.println("- Enter [S] for Spheres -");
+            System.out.println("- Enter [Y] for Cylinder -");
+            System.out.println("- Enter [A] for All Types of Shapes -");
+            System.out.println("- Enter [E] to Exit the program -");
+            System.out.print("Enter your choice: ");
+            String userInput = scanner.nextLine();
+           
+            switch (userInput.toUpperCase().charAt(0)) {
+                case 'C':
+                    toServer.writeObject("C");                    break;
+                case 'R':
+                    toServer.writeObject("R");                    break;
+                case 'T':
+                    toServer.writeObject("T");                    break;
+                case 'S':
+                    toServer.writeObject("S");                    break;
+                case 'Y':
+                    toServer.writeObject("Y");                    break;
+                case 'A':
+                    toServer.writeObject("A");                    
+                    break;
+                case 'E':
+                    System.out.println("Exiting the program");                    
+                    break;
+            }
+
+            System.out.println(userInput + "request has been sent to the server\n");
+            
+            ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
+
+            ArrayList<Shapes> arrayFromServer = (ArrayList<Shapes>) fromServer.readObject();
+
+            System.out.println("obj is recived from the server\n");
+
+            for (final Shapes shape : arrayFromServer) {
+                shape.displayDescription();
+                
+                if (shape instanceof Circle){
+                
+                System.out.println("Area: " + shape.getArea());
+                System.out.println("Perimeter: " + shape.getPerimeter());
+                
+                } else if (shape instanceof Triangle) {
+                    
+                System.out.println("Area: " + shape.getArea());
+                System.out.println("Perimeter: " + shape.getPerimeter());
+                    
+                } else if (shape instanceof Rectangle) {
+                    
+                System.out.println("Area: " + shape.getArea());
+                System.out.println("Perimeter: " + shape.getPerimeter());
+                    
+                } else if (shape instanceof Sphere) {
+                    
+                System.out.println("Area: " + shape.getArea());
+                System.out.println("Volume: " + shape.getVolume());
+                    
+                } else if (shape instanceof Cylinder) {
+                    
+                System.out.println("Area: " + shape.getArea());
+                System.out.println("Volume: " + shape.getVolume());
+                    
+                } else {
+                    
+                    System.out.println("ArrayList received is invalid");
+                    
+                }
+                
+                socket.close();
+            
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e);
+            
+        }
+        
+        Menu();
+        
+    }
+
 }

@@ -28,6 +28,11 @@ public class Cylinder extends ThreeDShapes{
     public double getArea() {
         return 2 * Math.PI * faceRadius * (faceRadius + height);
     }
+    
+    @Override
+    public double getPerimeter() {
+        return 0;
+    }
 
     @Override
     public void displayDescription(){

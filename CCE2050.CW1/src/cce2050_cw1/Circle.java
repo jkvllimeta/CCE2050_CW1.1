@@ -37,4 +37,9 @@ public class Circle extends TwoDShapes implements Serializable{
     public double getPerimeter(){
         return Math.PI * (circRadius * 2);
     }
+    
+    @Override
+    public double getVolume(){
+        return 0;
+    }
 }

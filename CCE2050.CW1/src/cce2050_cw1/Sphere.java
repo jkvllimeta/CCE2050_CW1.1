@@ -34,4 +34,10 @@ public class Sphere extends ThreeDShapes {
     System.out.println("I'm also a sphere");
     }
     
+    @Override
+    public double getPerimeter() {
+
+        return 0;
+    }
+    
 }

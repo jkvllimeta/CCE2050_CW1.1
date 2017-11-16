@@ -42,5 +42,10 @@ public class Triangle extends TwoDShapes {
 
         return side1 + side2 + side3;
     }
+
+    @Override
+    public double getVolume(){
+    return 0;
+    }
     
 }
