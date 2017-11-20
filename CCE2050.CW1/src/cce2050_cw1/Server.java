@@ -5,20 +5,17 @@
  */
 package cce2050_cw1;
 
-import java.io.BufferedReader;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.FileWriter;
 
 /**
  *
@@ -30,8 +27,8 @@ import java.util.Scanner;
 public class Server {
     
     private static ArrayList<Shapes> shapesArray = new ArrayList<Shapes>();
-    private static ObjectOutputStream arrayListToClient;
-    private static ObjectInputStream shapeFromClient;
+    private static ObjectOutputStream toClient;
+    private static ObjectInputStream inputFromClient;
     private static ObjectOutputStream writeToFile;
     private static ObjectInputStream readFromFile;
     static String ip = "127.0.0.1";
@@ -39,10 +36,10 @@ public class Server {
     private static ServerSocket serverSocket;
     private static Socket socket;
     private static File arrayFile = new File("shapearray.dat");
+    //final static Gson gson = new GsonBuilder().create();
     
     public static void main(String[] args) {
-        
-    new Thread( () -> {
+
     try{       
                
         while (true) {
@@ -54,116 +51,115 @@ public class Server {
                 System.out.println("Connected");
                // shapeToClient = new ObjectOutputStream(socket.getOutputStream());
                 
-                shapeFromClient = new ObjectInputStream(socket.getInputStream());
+                inputFromClient = new ObjectInputStream(socket.getInputStream());
                 System.out.println("Stream from Client initialized");
                 
-                arrayListToClient = new ObjectOutputStream(socket.getOutputStream());
+                toClient = new ObjectOutputStream(socket.getOutputStream());
                 System.out.println("Stream to Client initialized");
                 
-                writeToFile = new ObjectOutputStream(new FileOutputStream(arrayFile, true));
-                System.out.println("File Writer initialized");
                 
-                Circle receivedShape = (Circle) shapeFromClient.readObject();
-                shapeFromClient.close();
-                System.out.println(receivedShape.getClass() + " received from Client");
                 
-                shapesArray.add(receivedShape);
+                readFromFile = new ObjectInputStream(new FileInputStream(arrayFile));
+                System.out.println("File Reader Initialized");
                 
-                System.out.println(receivedShape.getName() + " added to the Shapes ArrayList");
+               Object receivedInput = inputFromClient.readObject();
                 
-                writeToFile.writeObject(receivedShape);
+                System.out.println("Input Received" + receivedInput.getClass());
                 
-                /*
-                for (Shapes s : shapesArray){
-                    
-                    writeToFile.writeObject(shapesArray);
-                    
-                }*/
                 
-                //shapesArray.add(clientShape);
-                System.out.println(shapesArray.get(0).getName());
-                System.out.println(receivedShape.getArea());
+                if (receivedInput.getClass() == ArrayList.class){
+                    
+                System.out.println(receivedInput.getClass() + " received from Client");
+               
+                     ArrayList <Shapes> receivedInput1 = (ArrayList <Shapes>)receivedInput;
+                     System.out.println("ArrayList from Client cast into ArrayList of Shapes");
+                    //ArrayList<Shapes> shapeArrayFromClient = (ArrayList<Shapes>) receivedInput; 
+                    
+                    //for(Shapes shape : (ArrayList<Shapes>) shapeArrayFromClient){
+                    for(Shapes x: receivedInput1){
+                        System.out.println(x.toString());
+                        x.getName();}
+                    
+                    inputFromClient.close();
+                    
+                    FileOutputStream outFile = new FileOutputStream(arrayFile);
+                    System.out.println("File Output Stream initialized");
                 
-             //   Object clientInput = shapeFromClient.readObject();
+                    //FileWriter writer = new FileWriter(arrayFile);
                 
-                /*if(clientInput.getClass() == ArrayList.class){
+                    writeToFile = new ObjectOutputStream(outFile);
+                    System.out.println("File Writer initialized");
                     
-                    writeToFile.writeObject(clientInput);                       
+                    writeToFile.writeObject(receivedInput1);
+                    System.out.println("ArrayList Written to File");
+                    //gson.toJson(receivedInput, writer);
+                    //}
+                   
+                    //writeToFile.close();
+                    //outFile.close();
+                    // inputFromClient.close();
+                    //toClient.writeObject("ArrayList received");
                     
-                } else if (clientInput.getClass() == String.class){
+                    //toClient.close();
+                }       
+                else if (receivedInput.getClass() == String.class){
                     
-                    System.out.println("The input received from the client is " + clientInput);
-                    
-                    
-                    
-                    
-                    if (clientInput == "C"){
-                     
-                        readFromFile = new ObjectInputStream(new FileInputStream("shapearray.dat"));
-                        
-                        ArrayList arrayFromFile = readFromFile;
-                        
-                        for (Shapes shape : (ArrayList<Shapes>) clientInput)
-                    {
-                        if (Shapes.getClass() == Circle.class){
-                            
-                        }
-                    }
-                        
-                    }
-                    
-                    
-                } else {
-                    
-                    System.out.println("Invalid Input from Client");
-                    
-                }*/
-
-                //System.out.println();
+                System.out.println("The input received from the client is " + receivedInput);
                 
-               // Shapes receivedShape = (Shapes) shapeFromClient.readObject();
-
-
+                ArrayList<Shapes> tempShapes = (ArrayList<Shapes>) readFromFile.readObject();  
+                    System.out.println(tempShapes);
+                    readFromFile.close();
+                
+                //ObjectOutputStream outputToClient = new ObjectOutputStream(socket.getOutputStream());
+                toClient.writeObject(tempShapes);
+                //outputToClient.writeObject(tempShapes);
+                
+                System.out.println("ArrayList successfully sent to Client");
+                
+                //outputToClient.writeObject("Object added successfully");   
+                
+                //outputToClient.close();
+               
             }
-    
+        }
     }catch(Exception e){
-        System.out.println("hi"+e);
+        System.out.println(e);
     } 
-    }).start();
-    
     
     }
-    
-    /*public static void readObject(){
-        try{
-            
-                
-            Shapes clientShape = (Shapes)shapeFromClient.readObject();
-            
-        } catch (Exception e){
-            System.out.println("ERROR: " + e.getMessage());
-        }
-    }*/
     
     public static void sendCircle(){
        
         try{
-            for (int i = 0; i<shapesArray.size(); i++){
             
-            //readFromFile.readObject(arrayFile);
+            
+            /*for (int i = 0; i<shapesArray.size(); i++){
+            
+            readFromFile.readObject();
             if (shapesArray.get(i) instanceof Circle){
             
                 arrayListToClient.writeObject(i);   
-                }
-            }
+                }*/
             
-        } catch (Exception e){
+             socket.close();
+            
+            }
+    catch (Exception e){
             e.printStackTrace();
                 
         } 
         
-    
-    
     }
+    
+    /*public static void fileWrite (ArrayList<Shapes> shapes){
+        try{
+        writeToFile = new ObjectOutputStream(new FileOutputStream(arrayFile, true));
+        
+        writeToFile.writeObject(shapes);
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }
+*/
     
 }

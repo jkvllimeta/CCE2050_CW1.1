@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 package cce2050_cw1;
+import java.io.Serializable;
 
 /**
  *
  * @author M00607647
  */
-public class Rectangle extends TwoDShapes {
+public class Rectangle extends TwoDShapes implements Serializable {
     
     private double rectHeight;
     private double rectWidth;

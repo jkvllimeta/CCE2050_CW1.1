@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 package cce2050_cw1;
+import java.io.Serializable;
 
 /**
  *
  * @author M00607647
  */
-public class Cylinder extends ThreeDShapes{
+public class Cylinder extends ThreeDShapes implements Serializable{
     
     private double faceRadius;
     private double height;

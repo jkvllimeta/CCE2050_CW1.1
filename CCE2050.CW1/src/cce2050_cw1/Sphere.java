@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 package cce2050_cw1;
+import java.io.Serializable;
 
 /**
  *
  * @author M00607647
  */
-public class Sphere extends ThreeDShapes {
+public class Sphere extends ThreeDShapes implements Serializable {
     
     private double sphereRadius;
     

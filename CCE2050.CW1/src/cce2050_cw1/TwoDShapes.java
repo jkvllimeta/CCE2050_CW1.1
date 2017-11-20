@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 package cce2050_cw1;
+import java.io.Serializable;
 
 /**
  *
  * @author Joseph
  */ 
-public abstract class TwoDShapes extends Shapes {
+public abstract class TwoDShapes extends Shapes implements Serializable {
     
      public TwoDShapes(String name, int noOfSides) {
      super(name, noOfSides);
