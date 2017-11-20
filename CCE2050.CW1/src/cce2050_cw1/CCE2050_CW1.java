@@ -26,6 +26,7 @@ public class CCE2050_CW1 {
     static ObjectInputStream receiveObject;
     static String ip = "127.0.0.1";
     static int socketNo = 5555;
+    static int socketNo2 = 8888;
     static Scanner s = new Scanner(System.in);
     static ArrayList<Shapes> shapesArray = new ArrayList<Shapes>();
     
@@ -38,7 +39,7 @@ public class CCE2050_CW1 {
         
         //sendObject = new ObjectOutputStream(clientSocket.getOutputStream());
        // receiveObject = new ObjectInputStream(clientSocket.getInputStream());
-        
+       
         Menu();
         
         //} catch (Exception e){
@@ -235,9 +236,9 @@ public class CCE2050_CW1 {
 
             oos.flush();
             
-            System.out.println("Array of Shapes has been sent to the Server." + shapesArray.size());
+            System.out.println("Array of Shapes has been sent to the Server. Containing " + shapesArray.size() + " number of Shapes.");
             for (Shapes x :shapesArray) 
-                 System.out.println(x.toString());
+                 System.out.println(x.getName() + " was added to the ArrayList\n");
             
 
             // Create an input stream to receive data from the server
@@ -260,12 +261,13 @@ public class CCE2050_CW1 {
     
     public static void receiveShapes() {
         try {
+            while(true){
             Socket socket = new Socket(ip, socketNo);
+            
             System.out.println(socket + " initialized");
             ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
             System.out.println(toServer + " initialized");
-            ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
-            System.out.println(fromServer + " initialized");
+
             
             Scanner scanner = new Scanner(System.in);
 
@@ -279,21 +281,23 @@ public class CCE2050_CW1 {
             System.out.println("- Enter [E] to Exit the program -");
             System.out.print("Enter your choice: ");
             String userInput = scanner.nextLine();
+            String choice = userInput.toUpperCase();
 
             System.out.println(userInput + " request has been sent to the server\n");
             
-            toServer.writeObject(userInput);
+            toServer.writeObject(choice);
             
-            toServer.close();
+            //toServer.close();
             System.out.println("Request sent");
             
             //ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
-
+            ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
+            System.out.println(fromServer + " initialized");
             ArrayList<Shapes> arrayFromServer = (ArrayList<Shapes>) fromServer.readObject();
 
             System.out.println("Arraylist of Shapes has been received from the Server\n");
-            
-            switch (userInput.charAt(0)){
+            //toServer.close();
+            switch (choice.charAt(0)){
                 
                 case 'C': for (final Shapes shape : arrayFromServer) {
                           if (shape instanceof Circle){
@@ -348,12 +352,15 @@ public class CCE2050_CW1 {
                               System.out.println("I am a generic shape");
                           }
                 }
-                                socket.close();
+                          
+                case 'E': System.exit(0);
+                
+                                //socket.close();
 
                 }
-            
+            }
         } catch (Exception e) {
-            System.out.println(e);   
+            e.printStackTrace();   
         }
         
         Menu();
