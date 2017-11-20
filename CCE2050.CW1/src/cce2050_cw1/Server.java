@@ -33,6 +33,7 @@ public class Server {
     private static ObjectInputStream readFromFile;
     static String ip = "127.0.0.1";
     static int socketNo = 5555;
+    static int socketNo2 = 8888;
     private static ServerSocket serverSocket;
     private static Socket socket;
     private static File arrayFile = new File("shapearray.dat");
@@ -41,11 +42,11 @@ public class Server {
     public static void main(String[] args) {
 
     try{       
-               
+               serverSocket = new ServerSocket(socketNo);
+                System.out.println ("Server Started");
         while (true) {
                 
-                serverSocket = new ServerSocket(socketNo);
-                System.out.println ("Server Started");
+                
                 
                 socket = serverSocket.accept();
                 System.out.println("Connected");
@@ -80,7 +81,7 @@ public class Server {
                         System.out.println(x.toString());
                         x.getName();}
                     
-                    inputFromClient.close();
+                    //inputFromClient.close();
                     
                     FileOutputStream outFile = new FileOutputStream(arrayFile);
                     System.out.println("File Output Stream initialized");
@@ -103,12 +104,14 @@ public class Server {
                     //toClient.close();
                 }       
                 else if (receivedInput.getClass() == String.class){
-                    
-                System.out.println("The input received from the client is " + receivedInput);
                 
-                ArrayList<Shapes> tempShapes = (ArrayList<Shapes>) readFromFile.readObject();  
-                    System.out.println(tempShapes);
-                    readFromFile.close();
+                String inputString = (String) receivedInput;
+                System.out.println("The input received from the client is " + inputString);
+                
+                //ArrayList<Shapes> 
+                       ArrayList tempShapes = (ArrayList<Shapes>) readFromFile.readObject();  
+                    System.out.println("The current ArrayList size of the one saved in the file is " + tempShapes.size());
+                    //readFromFile.close();
                 
                 //ObjectOutputStream outputToClient = new ObjectOutputStream(socket.getOutputStream());
                 toClient.writeObject(tempShapes);
