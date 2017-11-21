@@ -38,7 +38,7 @@ public class Cylinder extends ThreeDShapes implements Serializable{
     @Override
     public void displayDescription(){
     super.displayDescription();
-    System.out.println("I'm also a cylinder");
+    System.out.println("I'm also a Cylinder");
     }
     
 }

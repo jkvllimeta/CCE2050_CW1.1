@@ -32,23 +32,12 @@ public class CCE2050_CW1 {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        //try{
-        
-        //Socket clientSocket = new Socket(ip, socketNo);
-        //System.out.println("Client Socket opened at ip address " + ip + " and port number " + socketNo);
-        
-        //sendObject = new ObjectOutputStream(clientSocket.getOutputStream());
-       // receiveObject = new ObjectInputStream(clientSocket.getInputStream());
-       
         Menu();
-        
-        //} catch (Exception e){
-        //    System.out.println("ERROR:" + e);
-            
-            
-        //}  
+          
     }
     
+    //The following is the code for the main menu on the Client side. Options are given which
+    //will take the user to the appropriate submenus. 
     public static void Menu () {
         
         char choice1;
@@ -63,7 +52,6 @@ public class CCE2050_CW1 {
         System.out.println("5. Exit the program");
         
         choice1 = s.next().charAt(0);
-        //System.out.println(choice1);
         
         switch(choice1){
             
@@ -113,17 +101,23 @@ public class CCE2050_CW1 {
             
             case '3': sendToServer();
                       Menu();
+                      break;
                 
             case '4': receiveShapes();
                       Menu();
+                      break;
                     
             case '5': System.exit(0);
-                    
+                      break;
+                      
             default: System.out.println("Please select a valid option");
                      Menu();
         }
     }
     
+    //The following code blocks are the methods for creating the submenus for specific
+    //functions, such as the creation of shapes and sending and receiving ArrayLists
+    //to and from the Server
     public static void circleMenu(){
         System.out.println("Enter a name for your Circle:");
         String cName = s.next();
@@ -139,18 +133,6 @@ public class CCE2050_CW1 {
         shapesArray.add(circleChoice);
         System.out.println("The Circle has been added to the ArrayList");
         Menu();
-                                
-                                
-                                
-                               /* try{
-                                sendObject.writeObject(circleChoice);
-                               sendObject.flush();
-                               sendObject.close();
-                               //clientSocket.close();
-                                } catch (IOException e){
-                                    System.out.println(e);
-                                } 
-                                */
     }
     
     public static void triangleMenu(){
@@ -223,13 +205,16 @@ public class CCE2050_CW1 {
         Menu();
     }
     
-    
+
+    //This is the code for sending the entire ArrayList of shapes created by the Client
+    //to the Server in order for the Server to be able to save it to a file for future retrieval
     public static void sendToServer(){
         
         try {
             Socket socket = new Socket(ip, socketNo);
-            //Socket clientSocket = new Socket(ip, socketNo);
+            
             System.out.println("Client Socket opened at ip address " + ip + " and port number " + socketNo);
+            
             // Create an output stream to send data to the server
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(shapesArray);
@@ -260,7 +245,9 @@ public class CCE2050_CW1 {
 
     }
     
-    
+    //Method for requesting the Server to send shapes to display on the Client's side.
+    //The Client sends a String request for the type of shape the user wishes to receive
+    //whether they are individual shapes or all of the shapes available on the Server's file.
     public static void receiveShapes() {
         try {
             while(true){
@@ -289,78 +276,31 @@ public class CCE2050_CW1 {
             
             toServer.writeObject(choice);
             
-            //toServer.close();
+            
             System.out.println("Request sent");
             
-            //ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
             ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
-            System.out.println(fromServer + " initialized");
+            System.out.println("Object Stream from Server initialized");
             ArrayList<Shapes> arrayFromServer = (ArrayList<Shapes>) fromServer.readObject();
 
             System.out.println("Arraylist of Shapes has been received from the Server\n");
-            //toServer.close();
-            switch (choice.charAt(0)){
-                
-                case 'C': for (final Shapes shape : arrayFromServer) {
-                        if (shape.getClass() == Circle.class){
-                        shape.displayDescription();
-                        System.out.println("Area: " + shape.getArea());
-                        System.out.println("Perimeter: " + shape.getPerimeter());
-                        }
-                } break;
-                
-                case 'R': for (final Shapes shape : arrayFromServer) {
-                        if (shape.getClass() == Rectangle.class){
-                        System.out.println(shape);
-                        shape.displayDescription();
-                        System.out.println("Area: " + shape.getArea());
-                        System.out.println("Perimeter: " + shape.getPerimeter());
-                        }
-                } break;
-                          
-                case 'T':for (final Shapes shape : arrayFromServer) {
-                        if (shape.getClass() == Triangle.class){
-                        shape.displayDescription();
-                        System.out.println("Area: " + shape.getArea());
-                        System.out.println("Perimeter: " + shape.getPerimeter());
-                        }  
-                } break;
-                
-                case 'S': for (final Shapes shape : arrayFromServer) {
-                        if (shape.getClass() == Sphere.class){
-                        shape.displayDescription();
-                        System.out.println("Area: " + shape.getArea());
-                        System.out.println("Volume: " + shape.getVolume());
-                        }
-                } break;
-                
-                case 'Y': for (final Shapes shape : arrayFromServer) {
-                        if (shape.getClass() == Cylinder.class){
-                        shape.displayDescription();
-                        System.out.println("Area: " + shape.getArea());
-                        System.out.println("Volume: " + shape.getVolume());
-                        }
-                } break;
-                
-                case 'A': for(final Shapes shape : arrayFromServer){
+            
+            for(final Shapes shape : arrayFromServer){
                         shape.displayDescription();
                         if (shape instanceof TwoDShapes){
                             System.out.println("Area: " + shape.getArea());
                             System.out.println("Perimeter: " + shape.getPerimeter());
+                            System.out.println("");
                         } else if (shape instanceof ThreeDShapes){
                             System.out.println("Area: " + shape.getArea());
                             System.out.println("Volume: " + shape.getVolume());
+                            System.out.println("");
                         } else {
                             System.out.println("I am a generic shape");
                         } 
-                } break;
-                          
-                case 'E': System.exit(0);
-                        break;
-
-                } 
+                }  
             
-            Menu();
+            
             
             }
         } catch (Exception e) {

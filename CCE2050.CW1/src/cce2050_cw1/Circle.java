@@ -25,7 +25,7 @@ public class Circle extends TwoDShapes implements Serializable{
     @Override
     public void displayDescription(){
         super.displayDescription();
-        System.out.println("I'm also a circle");
+        System.out.println("I'm also a Circle");
     }
     
     @Override

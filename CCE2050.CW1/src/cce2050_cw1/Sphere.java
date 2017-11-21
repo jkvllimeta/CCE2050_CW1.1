@@ -32,7 +32,7 @@ public class Sphere extends ThreeDShapes implements Serializable {
     @Override
     public void displayDescription(){
     super.displayDescription();
-    System.out.println("I'm also a sphere");
+    System.out.println("I'm also a Sphere");
     }
     
     @Override

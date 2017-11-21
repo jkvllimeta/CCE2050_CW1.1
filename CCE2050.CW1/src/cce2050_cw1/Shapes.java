@@ -37,10 +37,6 @@ public abstract class Shapes implements Serializable {
         public void displayDescription(){
             System.out.println("I am a shape named " + name);
         }
-        @Override
-        public String toString()
-        {
-            return name +" has this number of sides: "+noOfSides;
-        }
+
 }
 

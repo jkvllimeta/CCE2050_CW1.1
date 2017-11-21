@@ -28,7 +28,7 @@ public class Triangle extends TwoDShapes implements Serializable {
     @Override
     public void displayDescription(){
         super.displayDescription();
-        System.out.println("I'm also a triangle");
+        System.out.println("I'm also a Triangle");
     }
 
     @Override

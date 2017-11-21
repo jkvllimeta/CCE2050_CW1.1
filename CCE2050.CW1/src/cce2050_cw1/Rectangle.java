@@ -25,7 +25,7 @@ public class Rectangle extends TwoDShapes implements Serializable {
     @Override
     public void displayDescription(){
         super.displayDescription();
-        System.out.println("I'm also a rectangle");
+        System.out.println("I'm also a Rectangle");
     }
     
     @Override
