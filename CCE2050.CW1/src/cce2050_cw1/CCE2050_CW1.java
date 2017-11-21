@@ -36,8 +36,9 @@ public class CCE2050_CW1 {
           
     }
     
-    //The following is the code for the main menu on the Client side. Options are given which
-    //will take the user to the appropriate submenus. 
+    //This is the code for the main menu on the Client side. The options are presented to the user
+    //which will either take the user to the corresponding submenu or execute the function in the
+    //case of sending shapes, receiving shapes, or program termination.
     public static void Menu () {
         
         char choice1;
@@ -131,7 +132,8 @@ public class CCE2050_CW1 {
         System.out.println("My perimeter is " + circleChoice.getPerimeter());
         
         shapesArray.add(circleChoice);
-        System.out.println("The Circle has been added to the ArrayList");
+        System.out.println("The Circle has been added to the ArrayList\n");
+        
         Menu();
     }
     
@@ -151,7 +153,7 @@ public class CCE2050_CW1 {
         triangleChoice.getPerimeter();
         
         shapesArray.add(triangleChoice);
-        System.out.println("The Triangle has been added to the ArrayList");
+        System.out.println("The Triangle has been added to the ArrayList\n");
         Menu();
     }
     
@@ -169,7 +171,7 @@ public class CCE2050_CW1 {
         rectangleChoice.getPerimeter();
         
         shapesArray.add(rectangleChoice);
-        System.out.println("The Rectangle has been added to the ArrayList");
+        System.out.println("The Rectangle has been added to the ArrayList\n");
         Menu();
     }
     
@@ -184,7 +186,7 @@ public class CCE2050_CW1 {
         System.out.println("My volume is " + sphereChoice.getVolume());
         
         shapesArray.add(sphereChoice);
-        System.out.println("The Sphere has been added to the ArrayList");
+        System.out.println("The Sphere has been added to the ArrayList\n");
         Menu();
     }
     
@@ -201,7 +203,7 @@ public class CCE2050_CW1 {
         System.out.println("My volume is " + cylinderChoice.getVolume());
         
         shapesArray.add(cylinderChoice);
-        System.out.println("The Cylinder has been added to the ArrayList");
+        System.out.println("The Cylinder has been added to the ArrayList\n");
         Menu();
     }
     
@@ -251,13 +253,17 @@ public class CCE2050_CW1 {
     public static void receiveShapes() {
         try {
             while(true){
+            
+            //The stream for sending the input to the client is initialized    
             Socket socket = new Socket(ip, socketNo);
             
-            System.out.println(socket + " initialized");
+            System.out.println("Socket initialized");
             ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
-            System.out.println(toServer + " initialized");
+            System.out.println("toServer stream initialized");
 
-            
+            //The scanner for taking the user input is initialized before presenting
+            //the options available to the user in a menu. The request is then sent to
+            //the Server for ArrayList filtering(if needed) and sending the requested Shapes back to the Client.
             Scanner scanner = new Scanner(System.in);
 
             System.out.println("Select the type of Shape you would like to receive from the Server: ");
@@ -276,9 +282,10 @@ public class CCE2050_CW1 {
             
             toServer.writeObject(choice);
             
-            
             System.out.println("Request sent");
             
+            //The ArrayList from the Server containing the requested Shapes is received
+            //and its contents are then displayed.
             ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream());
             System.out.println("Object Stream from Server initialized");
             ArrayList<Shapes> arrayFromServer = (ArrayList<Shapes>) fromServer.readObject();
@@ -300,11 +307,11 @@ public class CCE2050_CW1 {
                         } 
                 }  
             
-            
-            
             }
         } catch (Exception e) {
-            e.printStackTrace();   
+                System.out.println(e);
+                System.out.println("Program Terminated");
+                System.exit(0);
         }
         
         Menu();
