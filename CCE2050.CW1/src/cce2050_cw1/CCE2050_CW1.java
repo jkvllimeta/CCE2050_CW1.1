@@ -250,6 +250,8 @@ public class CCE2050_CW1 {
             System.out.println("The server has received " + obj);
             
             socket.close();
+            
+            Menu();
 
         } catch (Exception e) {
             System.out.println(e);
@@ -300,64 +302,66 @@ public class CCE2050_CW1 {
             switch (choice.charAt(0)){
                 
                 case 'C': for (final Shapes shape : arrayFromServer) {
-                          if (shape instanceof Circle){
-                          shape.displayDescription();
-                          System.out.println("Area: " + shape.getArea());
-                          System.out.println("Perimeter: " + shape.getPerimeter());
-                          }
-                }
+                        if (shape.getClass() == Circle.class){
+                        shape.displayDescription();
+                        System.out.println("Area: " + shape.getArea());
+                        System.out.println("Perimeter: " + shape.getPerimeter());
+                        }
+                } break;
                 
                 case 'R': for (final Shapes shape : arrayFromServer) {
-                          if (shape instanceof Rectangle){
-                          shape.displayDescription();
-                          System.out.println("Area: " + shape.getArea());
-                          System.out.println("Perimeter: " + shape.getPerimeter());
-                          }   
-                }
+                        if (shape.getClass() == Rectangle.class){
+                        System.out.println(shape);
+                        shape.displayDescription();
+                        System.out.println("Area: " + shape.getArea());
+                        System.out.println("Perimeter: " + shape.getPerimeter());
+                        }
+                } break;
                           
                 case 'T':for (final Shapes shape : arrayFromServer) {
-                          if (shape instanceof Triangle){
-                          shape.displayDescription();
-                          System.out.println("Area: " + shape.getArea());
-                          System.out.println("Perimeter: " + shape.getPerimeter());
-                          }
-                          
-                }
+                        if (shape.getClass() == Triangle.class){
+                        shape.displayDescription();
+                        System.out.println("Area: " + shape.getArea());
+                        System.out.println("Perimeter: " + shape.getPerimeter());
+                        }  
+                } break;
                 
                 case 'S': for (final Shapes shape : arrayFromServer) {
-                          if (shape instanceof Sphere){
-                          shape.displayDescription();
-                          System.out.println("Area: " + shape.getArea());
-                          System.out.println("Volume: " + shape.getVolume());
-                          }   
-                }
+                        if (shape.getClass() == Sphere.class){
+                        shape.displayDescription();
+                        System.out.println("Area: " + shape.getArea());
+                        System.out.println("Volume: " + shape.getVolume());
+                        }
+                } break;
                 
                 case 'Y': for (final Shapes shape : arrayFromServer) {
-                          if (shape instanceof Cylinder){
-                          shape.displayDescription();
-                          System.out.println("Area: " + shape.getArea());
-                          System.out.println("Volume: " + shape.getVolume());
-                          }   
-                }
+                        if (shape.getClass() == Cylinder.class){
+                        shape.displayDescription();
+                        System.out.println("Area: " + shape.getArea());
+                        System.out.println("Volume: " + shape.getVolume());
+                        }
+                } break;
                 
                 case 'A': for(final Shapes shape : arrayFromServer){
-                          shape.displayDescription();
-                          if (shape instanceof TwoDShapes){
-                              System.out.println("Area: " + shape.getArea());
-                              System.out.println("Perimeter: " + shape.getPerimeter());
-                          } else if (shape instanceof ThreeDShapes){
-                              System.out.println("Area: " + shape.getArea());
-                              System.out.println("Volume: " + shape.getVolume());
-                          } else {
-                              System.out.println("I am a generic shape");
-                          }
-                }
+                        shape.displayDescription();
+                        if (shape instanceof TwoDShapes){
+                            System.out.println("Area: " + shape.getArea());
+                            System.out.println("Perimeter: " + shape.getPerimeter());
+                        } else if (shape instanceof ThreeDShapes){
+                            System.out.println("Area: " + shape.getArea());
+                            System.out.println("Volume: " + shape.getVolume());
+                        } else {
+                            System.out.println("I am a generic shape");
+                        } 
+                } break;
                           
                 case 'E': System.exit(0);
-                
-                                //socket.close();
+                        break;
 
-                }
+                } 
+            
+            Menu();
+            
             }
         } catch (Exception e) {
             e.printStackTrace();   

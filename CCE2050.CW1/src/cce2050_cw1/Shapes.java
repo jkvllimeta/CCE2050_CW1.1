@@ -40,7 +40,7 @@ public abstract class Shapes implements Serializable {
         @Override
         public String toString()
         {
-            return name +"_"+noOfSides;
+            return name +" has this number of sides: "+noOfSides;
         }
 }
 
